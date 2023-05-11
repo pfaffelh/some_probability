@@ -1,19 +1,15 @@
 import tactic
-import data.nat.choose.basic
-import data.nat.choose.sum
-import data.int.basic
-import data.real.basic
 import probability.probability_mass_function.constructions
 
 noncomputable theory
-open_locale classical big_operators nnreal ennreal 
+open_locale classical big_operators ennreal 
 
 -- We are going to define B(n,p), the binomial distribution with n trials and success probability p.
 
 -- These are two basic lemmas on ℝ≥0∞ we will need below. 
 
 lemma eq_iff {a b : ℝ} (posb : 0 < b): ((a = b) ↔ (ennreal.of_real a = ennreal.of_real b)) :=
-begin
+begin 
   split, 
   intro h, 
   rw h, 
@@ -66,16 +62,16 @@ begin
 end
 
 -- Since a pmf has codomain ℝ≥0∞, we need the following:
-lemma mf_binom_pos (n : ℕ) (p : ℝ) (hp1 : p ≥ 0) (hp2 : p ≤ 1) : ∀ (a : finset.range (n+1)), (mf_binom n p) a ≥ 0 := 
+lemma mf_binom_pos (n : ℕ) (p : ℝ) (hp0 : p ≥ 0) (hp1 : p ≤ 1) : ∀ (a : finset.range (n+1)), (mf_binom n p) a ≥ 0 := 
 begin
   intro a, 
   rw mf_binom_apply, 
   apply mul_nonneg,
   apply mul_nonneg,
   exact (nat.choose n a).cast_nonneg,
-  apply pow_nonneg hp1, 
-  have hp2' : 0 ≤ 1-p, linarith, 
-  apply pow_nonneg hp2',
+  apply pow_nonneg hp0, 
+  have hp1' : 0 ≤ 1-p, linarith, 
+  apply pow_nonneg hp1',
 end
 
 -- Since a pmf must sum to one, we need the following:
@@ -105,7 +101,7 @@ begin
 end
 
 -- Now, define the pmf for the binomial distribution
-def pmf_binom (n : ℕ) (p : ℝ) (hp1 : 0 ≤ p) (hp2 : p ≤ 1) : pmf (finset.range (n+1)) := local_of_fintype  (mf_binom n p) (mf_binom_pos n p hp1 hp2) (mf_binom_sum_one n p) 
+def pmf_binom (n : ℕ) (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) : pmf (finset.range (n+1)) := local_of_fintype  (mf_binom n p) (mf_binom_pos n p hp0 hp1) (mf_binom_sum_one n p) 
 
 -- Here is the outer measure based on pmf_binom:
-def outer_measure_binom (n : ℕ) (p : ℝ) (hp1 : 0 ≤ p) (hp2 : p ≤ 1) := pmf.to_outer_measure (pmf_binom n p hp1 hp2)
+def outer_measure_binom (n : ℕ) (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) := pmf.to_outer_measure (pmf_binom n p hp0 hp1)
