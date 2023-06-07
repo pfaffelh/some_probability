@@ -40,6 +40,8 @@ begin
   },
 end
 
+/-- Two measures are the same iff they are equal on all closed sets.
+-/
 theorem measure_eq_iff_closed {E : Type*} [mea_E : measurable_space E] [top_E : topological_space E] [bor_E : borel_space E] {P : measure E} {P' : measure E} [is_probP : is_probability_measure P] [is_probP' : is_probability_measure P']
  : P = P' ↔ (∀ (A : set E), is_closed A → P A = P' A) :=
 begin
@@ -68,6 +70,9 @@ begin
     },
   },
 end
+
+/-- Two random variables have the same distribution iff their image measures agree on all closed sets.
+-/
 
 theorem ident_distrib_iff_closed {E Ω Ω': Type*} {mea_Om : measurable_space Ω} {mea_Om' : measurable_space Ω'} [mea_E : measurable_space E] [top_E : topological_space E] [bor_E : borel_space E] {P : measure Ω} {P' : measure Ω'} {X : Ω → E} {Y : Ω' → E} [is_probability_measure P] [is_probability_measure P'] [ae_meaX : fact (ae_measurable X P)] [ae_meaY : fact (ae_measurable Y P')] : ( (probability_theory.ident_distrib X Y P P') ↔ (∀ (A : set E), is_closed A → P (X⁻¹'A) = P' (Y⁻¹'A))) :=
 begin
@@ -123,6 +128,8 @@ begin
   exact thickened_indicator_aux_lt_top.ne,
 end
 
+/-- The lintegral of thickened indicators tends to the measure of a closed set.
+-/
 
 theorem lintegral_of_thickened_indicator_tendsto_indicator_closure {E : Type*} {mea_E : measurable_space E} [met_E : pseudo_emetric_space E] [bor_E : borel_space E] {P : measure E} [is_probability_measure P]  {δseq : ℕ → ℝ} (δseq_pos : ∀ (n : ℕ), 0 < δseq n) (δseq_lim : tendsto δseq filter.at_top (nhds 0)) (A : set E) : tendsto (λ n, ∫⁻ a, (thickened_indicator_aux (δseq n) A) a ∂P) at_top (𝓝 (P (closure A))) :=
 begin
@@ -157,6 +164,8 @@ begin
   exact ae_mea.out, 
 end
 
+/-- Two measures are the same iff their integrals of all bounded continuous functions agree. 
+-/
 theorem measure_eq_iff_bounded_continuous {E : Type*} [mea_E : measurable_space E] [met_E : pseudo_emetric_space E] [bor_E : borel_space E] {P : measure E} {P' : measure E} [is_probability_measure P] [is_probability_measure P'] : (P = P' ↔ ∀ (f : bounded_continuous_function E ℝ≥0), ∫⁻ a, f a ∂P = ∫⁻ a, f a ∂P') :=
 begin
   split, 
@@ -223,6 +232,7 @@ begin
   },
 end
 
+/-- Two random variables have the same distribution iff their expectations of all bounded continuous functions agree. -/
 theorem ident_distrib_iff_bounded_continuous {E Ω Ω': Type*} {mea_Om : measurable_space Ω} {mea_Om' : measurable_space Ω'} [mea_E : measurable_space E] [met_E : pseudo_emetric_space E][bor_E : borel_space E] {P : measure Ω} {P' : measure Ω'} {X : Ω → E} {Y : Ω' → E} [is_probability_measure P] [is_probability_measure P'] [ae_meaX : fact (ae_measurable X P)] [ae_meaY : fact (ae_measurable Y P')] : ( (probability_theory.ident_distrib X Y P P') ↔ (∀ (f : bounded_continuous_function E ℝ≥0), ∫⁻ ω, f (X ω) ∂P = ∫⁻ ω', f (Y ω') ∂P')) :=
 begin
   rw ident_distrib_iff,
