@@ -6,8 +6,8 @@ import data.real.basic
 
 noncomputable theory
 
-open set filter classical topological_space
-open_locale classical filter topological_space
+open set filter classical 
+open_locale classical filter topology
 
 variables {α : Type*} {β : Type*} 
 variables [topological_space α] [topological_space β] 
@@ -301,7 +301,6 @@ begin
   exact preimage_mono,
 end
 
-
 /-
   Now, we want to prove that every continuous function is cadlag. It is convenient to work with filters, since the next three results hold. 
 -/
@@ -450,7 +449,7 @@ begin
 end
 
 /-
-  ### Composition of continuous and cadlag is cadlg. 
+  ### Composition of continuous and cadlag is cadlag. 
 -/
 
 
