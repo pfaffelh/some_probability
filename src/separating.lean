@@ -6,12 +6,6 @@ open_locale classical big_operators nnreal ennreal topology
 
 open nnreal ennreal set filter
 
-lemma eq_enn_real_of_neq_top (x : ℝ≥0∞) (h : x ≠ ⊤ ) : x = (x.to_nnreal : ℝ≥0∞) :=
-begin
-  lift x to ℝ≥0 using h,
-  unfold_coes, simp only [eq_self_iff_true, ennreal.coe_eq_coe, ennreal.to_nnreal_coe, ennreal.some_eq_coe],
-end
-
 lemma is_pi_system.closed {E : Type*} [topological_space E] : is_pi_system ({A : set E | is_closed A}) :=
 begin
 --  dsimp [is_pi_system],
@@ -24,12 +18,21 @@ namespace measure_theory
 instance measure_theory.probability_measure_map {Ω E : Type*} {mea_Om : measurable_space Ω} [mea_E : measurable_space E] {P : measure Ω} [is_probP : is_probability_measure P] {X : Ω → E} [ae_meas : fact (ae_measurable X P)] : is_probability_measure (measure.map X P)  :=
 is_probability_measure_map ae_meas.out
 
-lemma push_forward_iff {Ω E : Type*} {mea_Om : measurable_space Ω} [mea_E : measurable_space E] {P : measure Ω} [is_probP : is_probability_measure P] {X : Ω → E} [ae_meas : fact (ae_measurable X P)] (A : set E) (hA : measurable_set A) : (measure.map X P) A = P (X⁻¹'A) :=
+lemma push_forward_iff {Ω E : Type*} {mea_Om : measurable_space Ω} [mea_E : measurable_space E] 
+{P : measure Ω} [is_probP : is_probability_measure P] 
+{X : Ω → E} [ae_meas : fact (ae_measurable X P)] 
+(A : set E) (hA : measurable_set A) : (measure.map X P) A = P (X⁻¹'A) :=
 begin
   rw measure_theory.measure.map_apply_of_ae_measurable ae_meas.out hA,
 end
 
-lemma ident_distrib_iff {E Ω Ω': Type*} {mea_Om : measurable_space Ω} {mea_Om' : measurable_space Ω'} [mea_E : measurable_space E] {P : measure Ω} {P' : measure Ω'} [is_probability_measure P] [is_probability_measure P'] {X : Ω → E} {Y : Ω' → E} [ae_measX : fact (ae_measurable X P)] [ae_measY : fact (ae_measurable Y P')] :  ((probability_theory.ident_distrib X Y P P') ↔ measure.map X P = measure.map Y P') :=
+lemma ident_distrib_iff 
+{E Ω Ω': Type*} {mea_Om : measurable_space Ω} {mea_Om' : measurable_space Ω'}
+[mea_E : measurable_space E] {P : measure Ω} {P' : measure Ω'} 
+[is_probability_measure P] [is_probability_measure P'] 
+{X : Ω → E} {Y : Ω' → E} 
+[ae_measX : fact (ae_measurable X P)] [ae_measY : fact (ae_measurable Y P')] :  
+((probability_theory.ident_distrib X Y P P') ↔ measure.map X P = measure.map Y P') :=
 begin
   split,
   {
@@ -42,7 +45,10 @@ end
 
 /-- Two measures are the same iff they are equal on all closed sets.
 -/
-theorem measure_eq_iff_closed {E : Type*} [mea_E : measurable_space E] [top_E : topological_space E] [bor_E : borel_space E] {P : measure E} {P' : measure E} [is_probP : is_probability_measure P] [is_probP' : is_probability_measure P']
+theorem measure_eq_iff_closed 
+{E : Type*} [mea_E : measurable_space E] [top_E : topological_space E] [bor_E : borel_space E] 
+{P : measure E} {P' : measure E} 
+[is_probP : is_probability_measure P] [is_probP' : is_probability_measure P']
  : P = P' ↔ (∀ (A : set E), is_closed A → P A = P' A) :=
 begin
   split, 
@@ -123,8 +129,7 @@ begin
   congr, 
   simp only [thickened_indicator_apply, ennreal.coe_eq_coe, option.mem_def, ennreal.some_eq_coe],
   ext, 
-  rw eq_enn_real_of_neq_top (thickened_indicator_aux δ A x), 
-  simp only [iff_self, ennreal.coe_eq_coe, ennreal.to_nnreal_coe], 
+  rw ennreal.coe_to_nnreal, 
   exact thickened_indicator_aux_lt_top.ne,
 end
 
